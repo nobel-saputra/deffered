@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>CookMaster</title>
+  </head>
+  <body>
+    <p>Mengalihkan ke aplikasi…</p>
+
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const resepId = params.get("id");
+
+      if (resepId) {
+        localStorage.setItem("deferred_resep_id", resepId);
+      }
+
+      // redirect ke download APK
+      window.location.href = "https://expo.dev/accounts/nobel404/projects/cookmaster/builds/285096d8-82d2-4c57-ba0d-bd7c72bec39d";
+    </script>
+  </body>
+</html>

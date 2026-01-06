@@ -1,46 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <h1>deffered deep link</h1>
-    <a href="deffered.html">deffered deep link</a>
-    <h3>
-      copy: <span id="linkText">https://deffered.vercel.app/deffered.html?id=2b56019b-d6b6-4fd5-a250-433c9ed0799b</span>
-      <button id="copyBtn" type="button">Copy</button>
-    </h3>
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-    <script>
-      (function () {
-        const btn = document.getElementById("copyBtn");
-        const link = document.getElementById("linkText");
-        if (!btn || !link) return;
-        btn.addEventListener("click", async function () {
-          const text = link.textContent.trim();
-          const original = btn.textContent;
-          try {
-            await navigator.clipboard.writeText(text);
-            btn.textContent = "Copied!";
-          } catch (e) {
-            // fallback for older browsers
-            const ta = document.createElement("textarea");
-            ta.value = text;
-            document.body.appendChild(ta);
-            ta.select();
-            try {
-              document.execCommand("copy");
-              btn.textContent = "Copied!";
-            } catch (err) {
-              btn.textContent = "Copy failed";
-            }
-            ta.remove();
-          }
-          setTimeout(() => (btn.textContent = original), 1800);
-        });
-      })();
-    </script>
-  </body>
-</html>
+  const supabase = createClient("https://lrafobvtluazrwiwfbha.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxyYWZvYnZ0bHVhenJ3aXdmYmhhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEzNjMzMDEsImV4cCI6MjA3NjkzOTMwMX0.EoUY3IkcZ9jLPbGrJ6SSvRexbXKLlbrH67g7cMnk784");
+
+  const params = new URLSearchParams(location.search);
+  const target = params.get("target"); // "recipe"
+  const targetId = params.get("id"); // UUID resep
+
+  await supabase.from("deferred_links").insert({
+    target,
+    target_id: targetId,
+  });
+
+  document.body.innerHTML = `
+    <h3>Aplikasi belum terinstall</h3>
+    <p>Silakan install aplikasi untuk melihat resep.</p>
+  `;
+</script>

@@ -4,15 +4,29 @@
   const supabase = createClient("https://lrafobvtluazrwiwfbha.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxyYWZvYnZ0bHVhenJ3aXdmYmhhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEzNjMzMDEsImV4cCI6MjA3NjkzOTMwMX0.EoUY3IkcZ9jLPbGrJ6SSvRexbXKLlbrH67g7cMnk784");
 
   const params = new URLSearchParams(location.search);
-  const target = params.get("target"); // "recipe"
-  const targetId = params.get("id"); // UUID resep
+  const target = params.get("target");
+  const targetId = params.get("id");
 
-  await supabase.from("deferred_links").insert({
+  document.body.innerHTML += `<pre>
+target: ${target}
+target_id: ${targetId}
+</pre>`;
+
+  const { data, error } = await supabase.from("deferred_links").insert({
     target,
     target_id: targetId,
   });
 
-  document.body.innerHTML = `
+  if (error) {
+    document.body.innerHTML += `<pre style="color:red">
+ERROR:
+${JSON.stringify(error, null, 2)}
+</pre>`;
+  } else {
+    document.body.innerHTML += `<p style="color:green">INSERT OK</p>`;
+  }
+
+  document.body.innerHTML += `
     <h3>Aplikasi belum terinstall</h3>
     <p>Silakan install aplikasi untuk melihat resep.</p>
   `;
